@@ -1,0 +1,102 @@
+{
+  "id": "ch02",
+  "subject": "data-structures",
+  "title": "线性表",
+  "titleEn": "Linear List",
+  "overview": "线性表是最基本、最简单的数据结构，是408考试的重点章节。本章需要重点掌握顺序表和链表的实现、操作及其比较，特别是链表的各种操作和边界条件处理。",
+  "sections": [
+    {
+      "id": "s01",
+      "title": "线性表的定义和基本操作",
+      "difficulty": 1,
+      "tags": ["线性表", "基本操作", "ADT", "前驱", "后继"],
+      "content": "## 线性表的定义\n\n线性表是具有**相同数据类型**的n个数据元素的**有限序列**。\n\n记作：L = (a₁, a₂, ..., aₙ)\n\n- a₁是**表头元素**，aₙ是**表尾元素**\n- 除第一个元素外，每个元素有且仅有一个**前驱**\n- 除最后一个元素外，每个元素有且仅有一个**后继**\n- n为线性表的**长度**，n=0时称为**空表**\n- 元素的**位序**从1开始（不是从0开始）\n\n## 基本操作\n\n| 操作 | 功能描述 | 时间复杂度 |\n|------|----------|------------|\n| InitList(&L) | 初始化空表，分配空间 | O(1) |\n| DestroyList(&L) | 销毁表，释放空间 | O(1) |\n| ListInsert(&L, i, e) | 在第i位插入e | O(n) |\n| ListDelete(&L, i, &e) | 删除第i位，用e返回 | O(n) |\n| GetElem(L, i) | 按位查找第i个元素 | O(1) |\n| LocateElem(L, e) | 按值查找元素e | O(n) |\n| Length(L) | 返回表长 | O(1) |\n| PrintList(L) | 输出所有元素 | O(n) |\n| Empty(L) | 判断是否为空 | O(1) |\n\n> **注意**：位序从1开始，数组下标从0开始。插入位置i的范围是1到n+1，删除位置i的范围是1到n。",
+      "keyPoints": [
+        {
+          "text": "线性表的位序从1开始，不是从0开始；插入位置范围1~n+1，删除位置范围1~n",
+          "isHighFrequency": false,
+          "tags": ["基本概念", "位序"]
+        }
+      ]
+    },
+    {
+      "id": "s02",
+      "title": "顺序表",
+      "difficulty": 2,
+      "tags": ["顺序表", "数组", "插入删除", "随机访问", "静态分配", "动态分配"],
+      "content": "## 顺序表的定义\n\n用一组**地址连续**的存储单元依次存储线性表中的数据元素，使得逻辑上相邻的元素在物理上也相邻。\n\n### 静态分配\n\n```c\n#define MaxSize 50\ntypedef struct {\n    ElemType data[MaxSize];  // 静态数组\n    int length;              // 当前长度\n} SqList;\n```\n\n**特点**：空间固定，编译时确定大小。\n\n### 动态分配\n\n```c\n#define InitSize 100\ntypedef struct {\n    ElemType *data;          // 动态数组指针\n    int MaxSize;             // 最大容量\n    int length;              // 当前长度\n} SeqList;\n```\n\n**特点**：空间可变，运行时动态扩展（使用malloc/realloc）。\n\n### 地址计算公式\n\n**LOC(aᵢ) = LOC(a₁) + (i-1) × sizeof(ElemType)**\n\n- 随机访问时间复杂度：**O(1)**\n- 这是顺序表最重要的优势\n\n## 插入操作\n\n在第i个位置插入元素e，需要将第i到第n个元素**全部后移**一位。\n\n```c\nbool ListInsert(SqList &L, int i, ElemType e) {\n    if (i < 1 || i > L.length + 1) return false;  // 位置合法\n    if (L.length >= MaxSize) return false;          // 表满\n    for (int j = L.length; j >= i; j--)            // 后移\n        L.data[j] = L.data[j-1];\n    L.data[i-1] = e;                               // 插入\n    L.length++;\n    return true;\n}\n```\n\n**时间复杂度分析**：\n- 最好情况：O(1)（在表尾插入）\n- 最坏情况：O(n)（在表头插入）\n- **平均情况：O(n)**（平均移动n/2次）\n\n## 删除操作\n\n删除第i个元素，需要将第i+1到第n个元素**全部前移**一位。\n\n```c\nbool ListDelete(SqList &L, int i, ElemType &e) {\n    if (i < 1 || i > L.length) return false;  // 位置合法\n    e = L.data[i-1];                          // 取出被删元素\n    for (int j = i; j < L.length; j++)        // 前移\n        L.data[j-1] = L.data[j];\n    L.length--;\n    return true;\n}\n```\n\n**时间复杂度分析**：\n- 最好情况：O(1)（删除表尾元素）\n- 最坏情况：O(n)（删除表头元素）\n- **平均情况：O(n)**（平均移动(n-1)/2次）\n\n## 按值查找\n\n从第一个元素开始逐个比较，找到返回位序，否则返回0。\n\n**时间复杂度**：O(n)（平均比较(n+1)/2次）",
+      "keyPoints": [
+        {
+          "text": "顺序表插入删除需要移动元素，平均移动n/2次，时间复杂度O(n)",
+          "isHighFrequency": true,
+          "examYears": [2014, 2017, 2019, 2021],
+          "tags": ["顺序表", "时间复杂度"]
+        },
+        {
+          "text": "顺序表支持随机访问，按位查找时间复杂度O(1)，这是链表做不到的",
+          "isHighFrequency": true,
+          "examYears": [2015, 2018, 2022],
+          "tags": ["随机访问"]
+        },
+        {
+          "text": "地址计算公式：LOC(ai) = LOC(a1) + (i-1) × sizeof(ElemType)",
+          "isHighFrequency": true,
+          "examYears": [2016, 2019, 2021],
+          "tags": ["地址计算"]
+        }
+      ]
+    },
+    {
+      "id": "s03",
+      "title": "链表",
+      "difficulty": 2,
+      "tags": ["单链表", "双链表", "循环链表", "头插法", "尾插法", "头结点"],
+      "content": "## 单链表\n\n每个结点包含**数据域**和**指针域**：\n\n```c\ntypedef struct LNode {\n    ElemType data;           // 数据域\n    struct LNode *next;      // 指针域\n} LNode, *LinkList;\n```\n\n### 头结点\n\n在第一个数据结点之前附加一个结点，好处：\n- 无需特殊处理空表和第一个结点的插入删除\n- 统一了操作逻辑\n- 头结点的数据域可以不存储信息\n\n### 按位序插入\n\n在第i个位置插入结点s：\n```c\n// 1. 找到第i-1个结点p\nLNode *p = GetElem(L, i-1);\n// 2. 新结点s的next指向p的next\ns->next = p->next;\n// 3. p的next指向s\np->next = s;\n```\n\n**时间复杂度**：O(n)（需要先查找前驱结点）\n\n### 按位序删除\n\n删除第i个结点：\n```c\n// 1. 找到第i-1个结点p\nLNode *p = GetElem(L, i-1);\n// 2. 取出被删结点q\nLNode *q = p->next;\n// 3. p的next指向q的next\np->next = q->next;\n// 4. 释放q\nfree(q);\n```\n\n**时间复杂度**：O(n)\n\n### 头插法建立链表\n\n```c\nLinkList List_HeadInsert(LinkList &L) {\n    L = (LinkList)malloc(sizeof(LNode));\n    L->next = NULL;\n    ElemType x;\n    scanf(\"%d\", &x);\n    while (x != -1) {\n        LNode *s = (LNode*)malloc(sizeof(LNode));\n        s->data = x;\n        s->next = L->next;  // 新结点指向原首元结点\n        L->next = s;        // 头结点指向新结点\n        scanf(\"%d\", &x);\n    }\n    return L;\n}\n```\n\n**特点**：输入顺序与链表顺序**相反**。\n\n### 尾插法建立链表\n\n```c\nLinkList List_TailInsert(LinkList &L) {\n    L = (LinkList)malloc(sizeof(LNode));\n    LNode *r = L;  // 尾指针\n    ElemType x;\n    scanf(\"%d\", &x);\n    while (x != -1) {\n        LNode *s = (LNode*)malloc(sizeof(LNode));\n        s->data = x;\n        r->next = s;  // 尾结点指向新结点\n        r = s;        // 更新尾指针\n        scanf(\"%d\", &x);\n    }\n    r->next = NULL;  // 尾结点next置空\n    return L;\n}\n```\n\n**特点**：输入顺序与链表顺序**相同**，需要维护尾指针。\n\n## 双链表\n\n```c\ntypedef struct DNode {\n    ElemType data;\n    struct DNode *prior, *next;  // 前驱和后继指针\n} DNode, *DLinkList;\n```\n\n**优势**：可以**O(1)找到前驱**，单链表做不到。\n\n### 双链表插入\n\n```c\ns->next = p->next;\np->next->prior = s;\ns->prior = p;\np->next = s;\n```\n\n**注意顺序**：先处理s的指针，再修改p和p->next的指针。\n\n### 双链表删除\n\n```c\np->next = q->next;\nq->next->prior = p;\nfree(q);\n```\n\n## 循环链表\n\n- **循环单链表**：最后一个结点的next指向头结点\n  - 判空：L->next == L\n  - 判断表尾：p->next == L\n\n- **循环双链表**：头结点的prior指向尾结点，尾结点的next指向头结点\n  - 判空：L->next == L && L->prior == L\n\n## 头插法和尾插法对比\n\n| 方法 | 特点 | 结果 | 应用 |\n|------|------|------|------|\n| 头插法 | 新结点插入表头 | **逆序** | 链表逆序 |\n| 尾插法 | 新结点插入表尾 | **原序** | 建立链表 |\n\n**关键区别**：头插法不需要尾指针，但结果与输入顺序相反。",
+      "keyPoints": [
+        {
+          "text": "单链表插入删除已知前驱时O(1)，不知前驱需先查找O(n)",
+          "isHighFrequency": true,
+          "examYears": [2013, 2015, 2016, 2018, 2020, 2022],
+          "tags": ["链表操作"]
+        },
+        {
+          "text": "头插法建立链表结果与输入顺序相反，尾插法保持原序",
+          "isHighFrequency": true,
+          "examYears": [2014, 2017, 2019],
+          "tags": ["头插法", "尾插法"]
+        },
+        {
+          "text": "双链表可以O(1)找到前驱，单链表不能；双链表插入注意指针修改顺序",
+          "isHighFrequency": true,
+          "examYears": [2015, 2018, 2021],
+          "tags": ["双链表"]
+        },
+        {
+          "text": "循环链表判空：单链表L->next==L，双链表L->next==L且L->prior==L",
+          "isHighFrequency": false,
+          "tags": ["循环链表"]
+        }
+      ]
+    },
+    {
+      "id": "s04",
+      "title": "顺序表和链表的比较",
+      "difficulty": 2,
+      "tags": ["比较", "选择", "适用场景"],
+      "content": "## 对比总结\n\n| 比较项 | 顺序表 | 链表 |\n|--------|--------|------|\n| 存储方式 | 连续存储 | 离散存储 |\n| 随机访问 | **O(1)** 支持 | O(n) 不支持 |\n| 插入删除 | O(n) 需移动元素 | **O(1)** 已知前驱时 |\n| 空间利用 | 可能浪费（预分配） | 按需分配，但指针额外开销 |\n| 缓存友好 | **好**（连续内存） | 差（内存分散） |\n| 适用场景 | 频繁查找 | 频繁插入删除 |\n| 表长 | 需预设最大长度 | 动态增长 |\n| 密度 | 高（无指针开销） | 低（每结点有指针） |\n\n## 选择依据\n\n1. **频繁按位查找**：选顺序表\n2. **频繁插入删除**：选链表\n3. **表长不确定**：选链表（动态分配）\n4. **表长基本固定**：选顺序表\n5. **需要随机访问**：只能选顺序表\n6. **内存紧张**：选顺序表（密度高）\n7. **需要频繁在两端操作**：选循环双链表\n\n## 易错点\n\n1. **链表不是所有操作都比顺序表快**，查找操作链表是O(n)\n2. **顺序表的插入删除不一定慢**，如果在表尾操作是O(1)\n3. **链表的插入删除不一定快**，如果需要先查找前驱是O(n)",
+      "keyPoints": [
+        {
+          "text": "顺序表随机访问O(1)，链表不支持随机访问；链表插入删除O(1)但需已知前驱",
+          "isHighFrequency": true,
+          "examYears": [2015, 2018, 2021],
+          "tags": ["顺序表vs链表"]
+        },
+        {
+          "text": "根据操作特点选择存储结构：查找多用顺序表，增删多用链表",
+          "isHighFrequency": false,
+          "tags": ["存储结构选择"]
+        }
+      ]
+    }
+  ]
+}
