@@ -75,13 +75,6 @@ python -m http.server 8080
     └── computer-networks/      # 计算机网络（6章）
 ```
 
-## 部署
-
-本项目可直接部署到 GitHub Pages：
-
-1. Fork 或 clone 本仓库
-2. 在 GitHub 仓库 Settings → Pages 中启用
-3. Source 选择 main 分支
 
 ## License
 
