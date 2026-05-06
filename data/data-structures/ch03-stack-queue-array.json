@@ -1,0 +1,139 @@
+{
+  "id": "ch03",
+  "subject": "data-structures",
+  "title": "栈、队列和数组",
+  "titleEn": "Stack, Queue and Array",
+  "overview": "栈和队列是两种重要的线性结构，广泛应用于各种算法中。本章重点掌握栈和队列的特性、实现及应用，特别是表达式求值和出栈序列问题，这是408考试的高频考点。",
+  "sections": [
+    {
+      "id": "s01",
+      "title": "栈",
+      "difficulty": 1,
+      "tags": ["栈", "LIFO", "顺序栈", "链栈", "共享栈"],
+      "content": "## 栈的定义\n\n栈是只允许在一端（**栈顶**）进行插入和删除操作的线性表。\n\n特性：**后进先出（LIFO）**\n\n### 基本操作\n\n| 操作 | 功能 |\n|------|------|\n| InitStack(&S) | 初始化空栈 |\n| Push(&S, e) | 元素e入栈 |\n| Pop(&S, &e) | 栈顶元素出栈，用e返回 |\n| GetTop(S, &e) | 读栈顶元素（不出栈） |\n| StackEmpty(S) | 判断栈是否为空 |\n| DestroyStack(&S) | 销毁栈 |\n\n## 顺序栈\n\n```c\n#define MaxSize 50\ntypedef struct {\n    ElemType data[MaxSize];\n    int top;  // 栈顶指针\n} SqStack;\n```\n\n**初始化**：top = -1（空栈）\n\n**入栈**：data[++top] = e（先移动指针，再赋值）\n\n**出栈**：e = data[top--]（先取值，再移动指针）\n\n**判空**：top == -1\n\n**栈满**：top == MaxSize - 1\n\n**栈长**：top + 1\n\n### 注意事项\n\n1. top初始值为-1，不是0\n2. 入栈先++再赋值，出栈先取值再--\n3. 栈满不能入栈，栈空不能出栈\n\n## 共享栈（两栈共享空间）\n\n两个栈共享一个数组，栈1从前往后增长，栈2从后往前增长。\n\n```c\ntypedef struct {\n    ElemType data[MaxSize];\n    int top1;  // 栈1栈顶\n    int top2;  // 栈2栈顶\n} SharedStack;\n```\n\n**栈满条件**：top1 + 1 == top2\n\n**优点**：空间利用率高，互补使用。\n\n## 链栈\n\n用链表实现的栈，链表头部作为栈顶，无需头结点。\n\n```c\ntypedef struct StackNode {\n    ElemType data;\n    struct StackNode *next;\n} StackNode, *LinkStack;\n```\n\n**优点**：\n- 无需预设大小，不会栈溢出\n- 入栈出栈都是O(1)\n\n**缺点**：每个结点需要指针开销",
+      "keyPoints": [
+        {
+          "text": "栈的操作特性：后进先出LIFO，所有操作都在栈顶进行，top初始值为-1",
+          "isHighFrequency": false,
+          "tags": ["栈"]
+        },
+        {
+          "text": "入栈：data[++top]=e（先移指针再赋值），出栈：e=data[top--]（先取值再移指针）",
+          "isHighFrequency": true,
+          "examYears": [2014, 2017, 2020],
+          "tags": ["栈操作"]
+        },
+        {
+          "text": "共享栈：栈1从前往后，栈2从后往前，栈满条件top1+1==top2",
+          "isHighFrequency": false,
+          "tags": ["共享栈"]
+        }
+      ]
+    },
+    {
+      "id": "s02",
+      "title": "队列",
+      "difficulty": 2,
+      "tags": ["队列", "FIFO", "循环队列", "链队", "队满判断"],
+      "content": "## 队列的定义\n\n队列是只允许在**队尾**插入、**队头**删除的线性表。\n\n特性：**先进先出（FIFO）**\n\n### 基本操作\n\n| 操作 | 功能 |\n|------|------|\n| InitQueue(&Q) | 初始化空队 |\n| EnQueue(&Q, e) | 元素e入队 |\n| DeQueue(&Q, &e) | 队头元素出队，用e返回 |\n| GetHead(Q, &e) | 读队头元素 |\n| QueueEmpty(Q) | 判断队是否为空 |\n\n## 循环队列\n\n为了解决假溢出问题，将队列首尾相接：\n\n```c\n#define MaxSize 50\ntypedef struct {\n    ElemType data[MaxSize];\n    int front, rear;  // 队头和队尾指针\n} SqQueue;\n```\n\n**初始化**：front = rear = 0\n\n**入队**：\n```c\nQ.data[Q.rear] = x;\nQ.rear = (Q.rear + 1) % MaxSize;\n```\n\n**出队**：\n```c\ne = Q.data[Q.front];\nQ.front = (Q.front + 1) % MaxSize;\n```\n\n**判空**：front == rear\n\n**队列长度**：(rear - front + MaxSize) % MaxSize\n\n### 队满判断方案\n\n**方案一：牺牲一个存储单元**\n- 队满条件：(rear + 1) % MaxSize == front\n- 可用空间：MaxSize - 1\n\n**方案二：增加size变量**\n- 入队时size++，出队时size--\n- 队满：size == MaxSize\n- 队空：size == 0\n\n**方案三：增加tag变量**\n- tag = 0 表示最近一次操作是删除\n- tag = 1 表示最近一次操作是插入\n- 队满：front == rear && tag == 1\n- 队空：front == rear && tag == 0\n\n## 链队\n\n用链表实现，队头删除，队尾插入，需要头结点。\n\n```c\ntypedef struct {\n    LNode *front, *rear;  // 队头和队尾指针\n} LinkQueue;\n```\n\n**初始化**：front = rear = 头结点\n\n**入队**：rear->next = s; rear = s;\n\n**出队**：q = front->next; front->next = q->next; free(q);\n\n**判空**：front == rear（都指向头结点）\n\n### 特殊情况\n\n当队列只有一个元素时，出队后rear需要指向头结点：\n```c\nif (front->next == rear) {\n    rear = front;  // rear指回头结点\n}\n```",
+      "keyPoints": [
+        {
+          "text": "循环队列队满判断：牺牲一个空间时 (rear+1)%MaxSize==front",
+          "isHighFrequency": true,
+          "examYears": [2015, 2018, 2021],
+          "tags": ["循环队列"]
+        },
+        {
+          "text": "循环队列长度：(rear-front+MaxSize)%MaxSize",
+          "isHighFrequency": true,
+          "examYears": [2016, 2019, 2022],
+          "tags": ["循环队列"]
+        },
+        {
+          "text": "队列三种队满判断方案：牺牲空间、size变量、tag变量",
+          "isHighFrequency": true,
+          "examYears": [2017, 2020, 2023],
+          "tags": ["队满判断"]
+        }
+      ]
+    },
+    {
+      "id": "s03",
+      "title": "栈和队列的应用",
+      "difficulty": 2,
+      "tags": ["表达式求值", "括号匹配", "BFS", "递归"],
+      "content": "## 表达式求值\n\n### 中缀表达式\n\n运算符在两个操作数之间，如：A + B * C\n\n**运算符优先级**：\n- 高：*  /\n- 低：+  -\n- 最高：(  （在栈外）\n- 最低：(  （在栈内）\n\n### 中缀转后缀（逆波兰表达式）\n\n算法：使用操作符栈\n1. 遇到**操作数**：直接输出\n2. 遇到**左括号**：入栈\n3. 遇到**右括号**：弹出栈顶元素并输出，直到遇到左括号（左括号弹出但不输出）\n4. 遇到**运算符**：弹出栈中优先级**大于等于**当前运算符的所有运算符，然后将当前运算符入栈\n5. 表达式结束：将栈中所有运算符弹出并输出\n\n**示例**：中缀 A + B * C - D / E\n\n转换过程：\n- A → 输出A\n- + → 入栈\n- B → 输出B\n- * → 优先级高于+，入栈\n- C → 输出C\n- - → 优先级低于*，弹出*输出；等于+，弹出+输出；-入栈\n- D → 输出D\n- / → 优先级高于-，入栈\n- E → 输出E\n- 结束 → 弹出/输出，弹出-输出\n\n**后缀表达式**：A B C * + D E / -\n\n### 后缀表达式求值\n\n使用操作数栈：\n1. 遇到操作数：入栈\n2. 遇到运算符：弹出两个操作数（先弹出的是右操作数），计算后结果入栈\n\n**示例**：求 A B C * + D E / -\n\n假设A=1, B=2, C=3, D=8, E=4\n\n- 1入栈，2入栈，3入栈\n- *：弹出3和2，2*3=6，6入栈\n- +：弹出6和1，1+6=7，7入栈\n- 8入栈，4入栈\n- /：弹出4和8，8/4=2，2入栈\n- -：弹出2和7，7-2=5，5入栈\n\n**结果**：5\n\n### 中缀转前缀\n\n类似中缀转后缀，但从右到左扫描，运算符优先级判断相反。\n\n## 括号匹配\n\n遇到左括号入栈，遇到右括号弹出栈顶匹配：\n- 栈为空时遇到右括号：失败\n- 遍历结束栈非空：失败\n- 其他：成功\n\n## 队列的应用\n\n1. **BFS**（广度优先搜索）\n2. **操作系统**中的进程就绪队列\n3. **打印任务**排队\n4. **树的层序遍历**\n5. **消息队列**\n\n## 栈的应用\n\n1. **递归**的实现\n2. **表达式求值**\n3. **括号匹配**\n4. **浏览器的前进/后退**\n5. **DFS**（深度优先搜索）",
+      "keyPoints": [
+        {
+          "text": "中缀转后缀：操作数直接输出，运算符比较优先级后入栈或弹出",
+          "isHighFrequency": true,
+          "examYears": [2014, 2017, 2020, 2023],
+          "tags": ["表达式求值"]
+        },
+        {
+          "text": "后缀表达式求值：操作数入栈，遇运算符弹出两个操作数计算（先弹出的是右操作数）",
+          "isHighFrequency": true,
+          "examYears": [2016, 2019, 2022],
+          "tags": ["后缀表达式"]
+        },
+        {
+          "text": "括号匹配：左括号入栈，右括号弹出栈顶匹配",
+          "isHighFrequency": false,
+          "tags": ["括号匹配"]
+        }
+      ]
+    },
+    {
+      "id": "s04",
+      "title": "数组和特殊矩阵",
+      "difficulty": 2,
+      "tags": ["数组", "矩阵压缩", "对称矩阵", "三角矩阵", "三对角矩阵", "稀疏矩阵"],
+      "content": "## 数组的存储\n\n### 一维数组\n\nLOC(aᵢ) = LOC(a₀) + i × L（L为元素大小）\n\n### 二维数组\n\n**行优先**（C语言）：\nLOC(a[i][j]) = LOC(a[0][0]) + (i × n + j) × L\n\n**列优先**（Fortran）：\nLOC(a[i][j]) = LOC(a[0][0]) + (j × m + i) × L\n\n- m为行数，n为列数\n- L为每个元素占用的字节数\n\n## 特殊矩阵的压缩存储\n\n### 对称矩阵\n\n只存下三角（含对角线），共 n(n+1)/2 个元素。\n\n映射关系：a[i][j] → k\n\n**下三角存储**（i ≥ j）：\nk = i(i+1)/2 + j\n\n**上三角存储**（i < j）：\nk = j(j+1)/2 + i\n\n### 三角矩阵\n\n上三角或下三角全为常数，只需存非零部分 + 一个常数。\n\n**下三角矩阵**：存下三角 + 常数c，共 n(n+1)/2 + 1 个元素\n\n### 三对角矩阵（带状矩阵）\n\n只存主对角线及上下各一条对角线，共 3n-2 个元素。\n\n映射关系：a[i][j] → k = 2i + j\n\n### 稀疏矩阵\n\n非零元素个数远小于总元素个数（一般小于5%），用**三元组表**存储：(行, 列, 值)\n\n**三元组表**：\n```c\ntypedef struct {\n    int i, j;    // 行号和列号\n    ElemType e;  // 元素值\n} Triple;\n\ntypedef struct {\n    Triple data[MaxSize];\n    int mu, nu, tu;  // 行数、列数、非零元素个数\n} TSMatrix;\n```\n\n**注意**：压缩存储后失去随机访问能力。",
+      "keyPoints": [
+        {
+          "text": "行优先地址计算：LOC(aij) = LOC(a00) + (i×n + j) × L",
+          "isHighFrequency": true,
+          "examYears": [2014, 2017, 2020],
+          "tags": ["数组地址计算"]
+        },
+        {
+          "text": "对称矩阵压缩：下三角存储，k=i(i+1)/2+j（i≥j）",
+          "isHighFrequency": true,
+          "examYears": [2015, 2018, 2021],
+          "tags": ["矩阵压缩"]
+        },
+        {
+          "text": "稀疏矩阵用三元组表存储，压缩后失去随机访问能力",
+          "isHighFrequency": false,
+          "tags": ["稀疏矩阵"]
+        }
+      ]
+    },
+    {
+      "id": "s05",
+      "title": "栈和队列的综合应用",
+      "difficulty": 3,
+      "tags": ["出栈序列", "卡特兰数", "递归"],
+      "content": "## 出栈序列问题\n\n**问题**：元素1,2,3,...,n依次入栈，问有多少种不同的出栈序列？\n\n**答案**：**卡特兰数** C(2n,n)/(n+1)\n\n### 常见卡特兰数\n\n| n | C(2n,n)/(n+1) |\n|---|---------------|\n| 1 | 1 |\n| 2 | 2 |\n| 3 | 5 |\n| 4 | 14 |\n| 5 | 42 |\n\n### 判断出栈序列是否合法\n\n方法：**模拟入栈出栈过程**\n\n1. 按入栈序列依次入栈\n2. 每次入栈后，检查栈顶是否等于当前出栈序列的下一个元素\n3. 如果相等则出栈，继续检查\n4. 最后栈为空则合法\n\n### 示例\n\n入栈序列：1,2,3\n\n合法出栈序列：123, 132, 213, 231, 321（共5种）\n\n**判断 3,1,2 是否合法**：\n- 1入栈，2入栈，3入栈\n- 栈顶3，出栈序列第一个是3，匹配，出栈\n- 栈顶2，出栈序列第二个是1，不匹配\n- 已经没有元素可入栈了\n- **不合法**\n\n## 递归与栈\n\n递归调用本质上使用**函数调用栈**：\n\n- 每次递归调用，将当前函数状态压栈\n- 递归返回时，从栈中恢复状态\n- 递归深度 = 栈的最大深度\n\n## 队列的应用场景\n\n1. **操作系统**：进程就绪队列、打印队列\n2. **图的BFS**：层序遍历\n3. **缓冲区**：生产者-消费者模型\n4. **树的层序遍历**\n5. **消息队列**：异步通信",
+      "keyPoints": [
+        {
+          "text": "n个元素入栈，出栈序列数为卡特兰数 C(2n,n)/(n+1)",
+          "isHighFrequency": true,
+          "examYears": [2013, 2016, 2019, 2022],
+          "tags": ["出栈序列", "卡特兰数"]
+        },
+        {
+          "text": "判断出栈序列合法性：模拟入栈出栈过程，栈顶匹配则出栈",
+          "isHighFrequency": true,
+          "examYears": [2014, 2017, 2020],
+          "tags": ["出栈序列"]
+        },
+        {
+          "text": "递归调用本质上使用函数调用栈，递归深度等于栈的最大深度",
+          "isHighFrequency": false,
+          "tags": ["递归与栈"]
+        }
+      ]
+    }
+  ]
+}
