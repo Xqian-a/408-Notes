@@ -1,0 +1,236 @@
+/* Tablet: 768px - 1024px */
+@media (max-width: 1024px) {
+  .app {
+    grid-template-columns: 1fr;
+  }
+
+  .sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: var(--sidebar-width);
+    height: 100vh;
+    z-index: 100;
+    transform: translateX(-100%);
+    transition: transform var(--transition-normal);
+    padding-top: var(--space-6);
+  }
+
+  .sidebar.open {
+    transform: translateX(0);
+  }
+
+  .toc {
+    display: none;
+  }
+
+  .main {
+    grid-column: 1;
+    padding: var(--space-6) var(--space-6);
+  }
+
+  .menu-btn {
+    display: flex;
+  }
+
+  .header__nav {
+    display: none;
+  }
+
+  .search {
+    max-width: 300px;
+  }
+
+  .home__subjects {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  /* Floating TOC button */
+  .toc-fab {
+    display: flex;
+  }
+}
+
+/* Mobile: < 768px */
+@media (max-width: 768px) {
+  :root {
+    --header-height: 52px;
+  }
+
+  .header {
+    padding: 0 var(--space-4);
+    gap: var(--space-2);
+  }
+
+  .header__logo span {
+    display: none;
+  }
+
+  .search {
+    max-width: 200px;
+  }
+
+  .search__kbd {
+    display: none;
+  }
+
+  .sidebar {
+    width: 85%;
+    max-width: 320px;
+  }
+
+  .main {
+    padding: var(--space-4) var(--space-4);
+  }
+
+  .article h1 {
+    font-size: var(--text-2xl);
+  }
+
+  .article h2 {
+    font-size: var(--text-xl);
+  }
+
+  .article h3 {
+    font-size: var(--text-lg);
+  }
+
+  .article pre {
+    margin-left: calc(-1 * var(--space-4));
+    margin-right: calc(-1 * var(--space-4));
+    border-radius: 0;
+    padding: var(--space-4);
+  }
+
+  .article table {
+    display: block;
+    overflow-x: auto;
+  }
+
+  .home {
+    padding: var(--space-8) var(--space-4);
+  }
+
+  .home__title {
+    font-size: var(--text-2xl);
+  }
+
+  .home__subtitle {
+    font-size: var(--text-base);
+  }
+
+  .home__subjects {
+    grid-template-columns: 1fr;
+  }
+
+  .search-results {
+    width: 95%;
+    max-height: 60vh;
+  }
+
+  .review-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .breadcrumb {
+    font-size: var(--text-xs);
+  }
+}
+
+/* Small mobile: < 480px */
+@media (max-width: 480px) {
+  .header__right {
+    gap: var(--space-1);
+  }
+
+  .search {
+    max-width: 160px;
+  }
+
+  .article h1 {
+    font-size: var(--text-xl);
+  }
+
+  .key-point, .high-freq-box {
+    padding: var(--space-3);
+    margin-left: calc(-1 * var(--space-4));
+    margin-right: calc(-1 * var(--space-4));
+    border-radius: 0;
+  }
+}
+
+/* Floating TOC button (tablet/mobile) */
+.toc-fab {
+  display: none;
+  position: fixed;
+  bottom: var(--space-6);
+  right: var(--space-6);
+  width: 48px;
+  height: 48px;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-primary);
+  color: var(--color-bg);
+  border-radius: 50%;
+  box-shadow: 0 4px 12px var(--color-shadow);
+  z-index: 50;
+  transition: transform var(--transition-fast);
+}
+
+.toc-fab:hover {
+  transform: scale(1.1);
+}
+
+.toc-fab svg {
+  width: 20px;
+  height: 20px;
+}
+
+/* TOC bottom sheet (mobile) */
+.toc-sheet {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  max-height: 60vh;
+  background: var(--color-bg);
+  border-top: 1px solid var(--color-border);
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+  box-shadow: 0 -4px 20px var(--color-shadow);
+  z-index: 150;
+  padding: var(--space-4) var(--space-6);
+  overflow-y: auto;
+  transform: translateY(100%);
+  transition: transform var(--transition-normal);
+}
+
+.toc-sheet.open {
+  transform: translateY(0);
+}
+
+.toc-sheet__handle {
+  width: 36px;
+  height: 4px;
+  background: var(--color-gray-300);
+  border-radius: var(--radius-full);
+  margin: 0 auto var(--space-4);
+}
+
+.toc-sheet__title {
+  font-size: var(--text-sm);
+  font-weight: 600;
+  margin-bottom: var(--space-3);
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* Prefers reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
