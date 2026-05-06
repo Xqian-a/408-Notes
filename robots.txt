@@ -1,3 +1,4 @@
 User-agent: *
 Allow: /
-Sitemap: https://yourusername.github.io/408-Notes/sitemap.txt
+
+Sitemap: https://xqian-a.github.io/408-Notes/sitemap.txt
