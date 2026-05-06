@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="408计算机考研知识库 - 涵盖数据结构、计算机组成原理、操作系统、计算机网络全部大纲知识点，标注近10年高频考点">
+  <meta name="keywords" content="408考研,计算机考研,数据结构,计算机组成原理,操作系统,计算机网络,考研知识点">
+  <meta property="og:title" content="408考研知识库">
+  <meta property="og:description" content="408计算机考研全覆盖知识点，高频考点标注">
+  <meta property="og:type" content="website">
+  <title>408考研知识库</title>
+
+  <link rel="stylesheet" href="css/variables.css">
+  <link rel="stylesheet" href="css/reset.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/content.css">
+  <link rel="stylesheet" href="css/highlight.css">
+  <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+  <a href="#main-content" class="skip-link">跳转到内容</a>
+
+  <div class="app" id="app">
+    <!-- Header -->
+    <header class="header">
+      <button class="menu-btn" id="menuBtn" aria-label="打开菜单">
+        <span class="menu-btn__icon"></span>
+      </button>
+
+      <a href="#/" class="header__logo">
+        <span class="header__logo-icon">408</span>
+        <span>考研知识库</span>
+      </a>
+
+      <nav class="header__nav" id="headerNav">
+        <!-- Subject tabs rendered by JS -->
+      </nav>
+
+      <div class="header__right">
+        <div class="search">
+          <svg class="search__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="11" cy="11" r="8"></circle>
+            <path d="m21 21-4.35-4.35"></path>
+          </svg>
+          <input type="text" class="search__input" id="searchInput" placeholder="搜索知识点..." aria-label="搜索知识点">
+          <span class="search__kbd">Ctrl+K</span>
+        </div>
+
+        <button class="theme-btn" id="themeBtn" aria-label="切换主题">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="theme-icon-light">
+            <circle cx="12" cy="12" r="5"></circle>
+            <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"></path>
+          </svg>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="theme-icon-dark" style="display:none">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+          </svg>
+        </button>
+      </div>
+    </header>
+
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+      <nav class="nav-tree" id="navTree">
+        <!-- Navigation tree rendered by JS -->
+      </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main" id="main-content">
+      <div class="main__content" id="contentArea">
+        <!-- Content rendered by JS -->
+        <div class="empty-state">
+          <div class="empty-state__icon">📚</div>
+          <h2 class="empty-state__title">欢迎使用408考研知识库</h2>
+          <p class="empty-state__desc">选择左侧科目开始学习，或使用搜索查找知识点</p>
+        </div>
+      </div>
+    </main>
+
+    <!-- TOC -->
+    <aside class="toc" id="toc">
+      <div class="toc__title">目录</div>
+      <div class="toc__list" id="tocList">
+        <!-- TOC rendered by JS -->
+      </div>
+    </aside>
+
+    <!-- Overlay for mobile sidebar -->
+    <div class="overlay" id="overlay"></div>
+
+    <!-- Search Results Panel -->
+    <div class="search-results" id="searchResults">
+      <div class="search-results__header">
+        <span class="search-results__count" id="searchCount"></span>
+        <button class="search-results__close" id="searchClose">关闭</button>
+      </div>
+      <div id="searchResultsList">
+        <!-- Search results rendered by JS -->
+      </div>
+    </div>
+
+    <!-- Floating TOC button (mobile) -->
+    <button class="toc-fab" id="tocFab" aria-label="查看目录">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M4 6h16M4 12h16M4 18h16"></path>
+      </svg>
+    </button>
+
+    <!-- TOC bottom sheet (mobile) -->
+    <div class="toc-sheet" id="tocSheet">
+      <div class="toc-sheet__handle"></div>
+      <div class="toc-sheet__title">目录</div>
+      <div class="toc__list" id="tocSheetList"></div>
+    </div>
+  </div>
+
+  <script src="js/lib/flexsearch.min.js?v=2"></script>
+  <script src="js/lib/marked.min.js?v=2"></script>
+  <script src="js/utils.js?v=2"></script>
+  <script src="js/router.js?v=2"></script>
+  <script src="js/navigation.js?v=2"></script>
+  <script src="js/toc.js?v=2"></script>
+  <script src="js/content-renderer.js?v=2"></script>
+  <script src="js/search.js?v=2"></script>
+  <script src="js/app.js?v=2"></script>
+</body>
+</html>
