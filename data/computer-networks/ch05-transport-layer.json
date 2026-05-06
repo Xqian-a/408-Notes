@@ -1,0 +1,93 @@
+{
+  "id": "ch05",
+  "subject": "computer-networks",
+  "title": "传输层",
+  "titleEn": "Transport Layer",
+  "overview": "传输层提供端到端通信，重点掌握TCP的三次握手、四次挥手、流量控制和拥塞控制，这些是408考试的高频考点。",
+  "sections": [
+    {
+      "id": "s01",
+      "title": "传输层功能",
+      "difficulty": 1,
+      "tags": ["传输层", "端口", "复用分用", "Socket"],
+      "content": "## 传输层的功能\n\n- 提供**端到端**的逻辑通信\n- **复用**：多个应用层进程共用传输层\n- **分用**：将数据交付给正确的应用进程\n\n## 端口号\n\n16位，标识应用进程：\n\n| 范围 | 类型 |\n|------|------|\n| 0-1023 | 熟知端口（系统进程） |\n| 1024-49151 | 注册端口 |\n| 49152-65535 | 动态端口 |\n\n### 常见端口\n\n| 协议 | 端口 |\n|------|------|\n| HTTP | 80 |\n| HTTPS | 443 |\n| FTP | 20/21 |\n| SMTP | 25 |\n| DNS | 53 |\n| SSH | 22 |\n\n## 套接字\n\n**Socket = IP地址 + 端口号**\n\n唯一标识一个网络连接。",
+      "keyPoints": [
+        {
+          "text": "传输层提供端到端通信，Socket=IP+端口，常见端口80/443/21/25/53",
+          "isHighFrequency": true,
+          "examYears": [2015, 2018, 2021],
+          "tags": ["端口"]
+        }
+      ]
+    },
+    {
+      "id": "s02",
+      "title": "UDP",
+      "difficulty": 1,
+      "tags": ["UDP", "特点", "校验和", "无连接"],
+      "content": "## UDP的特点\n\n- **无连接**：不需要建立连接\n- **不可靠**：不保证交付\n- **面向报文**：保留报文边界\n- **没有拥塞控制**\n- **首部开销小**（8字节）\n- **支持一对一、一对多、多对一、多对多**\n\n## UDP首部\n\n```\n| 源端口(2B) | 目的端口(2B) |\n| 长度(2B) | 校验和(2B) |\n```\n\n## UDP校验和\n\n包括**伪首部**（源IP、目的IP、全0、协议号17、UDP长度）。\n\n## UDP的应用\n\n- DNS\n- DHCP\n- SNMP\n- 实时视频/音频\n- 游戏",
+      "keyPoints": [
+        {
+          "text": "UDP无连接不可靠但开销小速度快，适用于实时应用和DNS",
+          "isHighFrequency": true,
+          "examYears": [2014, 2017, 2020],
+          "tags": ["UDP"]
+        }
+      ]
+    },
+    {
+      "id": "s03",
+      "title": "TCP连接管理",
+      "difficulty": 3,
+      "tags": ["三次握手", "四次挥手", "SYN", "ACK", "FIN", "TIME_WAIT"],
+      "content": "## TCP的特点\n\n- **面向连接**\n- **可靠传输**\n- **面向字节流**\n- **点对点**\n- **有拥塞控制和流量控制**\n\n## 三次握手（建立连接）\n\n```\n客户端 → 服务器: SYN=1, seq=x\n服务器 → 客户端: SYN=1, ACK=1, seq=y, ack=x+1\n客户端 → 服务器: ACK=1, seq=x+1, ack=y+1\n```\n\n**为什么三次？**\n- 防止**失效的连接请求**到达服务器造成资源浪费\n\n## 四次挥手（释放连接）\n\n```\n客户端 → 服务器: FIN=1, seq=u\n服务器 → 客户端: ACK=1, ack=u+1\n服务器 → 客户端: FIN=1, seq=w\n客户端 → 服务器: ACK=1, ack=w+1\n```\n\n**为什么四次？**\n- TCP是全双工，每个方向需要单独关闭\n- 服务器可能还有数据要发送\n\n## TIME_WAIT状态\n\n客户端发送最后一个ACK后等待**2MSL**（最大报文段寿命）：\n- 确保服务器收到最后的ACK\n- 让旧连接的报文在网络中消失\n\n## TCP状态机\n\n```\nCLOSED → LISTEN → SYN_RCVD → ESTABLISHED\n  ↓                           ↓\n  → SYN_SENT → ESTABLISHED → FIN_WAIT_1 → FIN_WAIT_2 → TIME_WAIT → CLOSED\n```",
+      "keyPoints": [
+        {
+          "text": "三次握手：SYN→SYN+ACK→ACK，防止失效连接请求浪费资源",
+          "isHighFrequency": true,
+          "examYears": [2014, 2016, 2018, 2020, 2022, 2024],
+          "tags": ["三次握手"]
+        },
+        {
+          "text": "四次挥手：FIN→ACK→FIN→ACK，TCP全双工需单独关闭每个方向",
+          "isHighFrequency": true,
+          "examYears": [2015, 2017, 2019, 2021, 2023],
+          "tags": ["四次挥手"]
+        },
+        {
+          "text": "TIME_WAIT等待2MSL，确保对方收到ACK并让旧报文消失",
+          "isHighFrequency": true,
+          "examYears": [2016, 2020, 2023],
+          "tags": ["TIME_WAIT"]
+        }
+      ]
+    },
+    {
+      "id": "s04",
+      "title": "TCP可靠传输和拥塞控制",
+      "difficulty": 3,
+      "tags": ["滑动窗口", "流量控制", "拥塞控制", "慢开始", "拥塞避免", "快重传", "快恢复"],
+      "content": "## TCP可靠传输机制\n\n### 序号和确认号\n\n- **序号**：字节流的编号\n- **确认号**：期望收到的下一个字节编号（累积确认）\n\n### 超时重传\n\n发送数据后启动定时器，超时未收到确认则重传。\n\n### 快速重传\n\n收到**3个重复ACK**立即重传，不等超时。\n\n## 流量控制\n\n使用**滑动窗口**控制发送速率：\n\n接收方在ACK中通告**接收窗口rwnd**，发送方发送窗口 ≤ rwnd。\n\n## 拥塞控制\n\n防止网络拥塞，四种机制：\n\n### 慢开始\n\n- 拥塞窗口cwnd从1开始\n- 每收到一个ACK，cwnd加倍\n- 达到阈值ssthresh后转入拥塞避免\n\n### 拥塞避免\n\n- 每个RTT，cwnd加1（线性增长）\n- 出现超时：ssthresh = cwnd/2，cwnd = 1，重新慢开始\n\n### 快重传\n\n收到3个重复ACK立即重传。\n\n### 快恢复\n\n收到3个重复ACK：\n- ssthresh = cwnd/2\n- cwnd = ssthresh\n- 直接进入拥塞避免（不从1开始）\n\n## 发送窗口\n\n**发送窗口 = min(rwnd, cwnd)**\n\n- rwnd：接收窗口（流量控制）\n- cwnd：拥塞窗口（拥塞控制）",
+      "keyPoints": [
+        {
+          "text": "拥塞控制四算法：慢开始（指数增长）、拥塞避免（线性增长）、快重传、快恢复",
+          "isHighFrequency": true,
+          "examYears": [2015, 2017, 2019, 2021, 2023],
+          "tags": ["拥塞控制"]
+        },
+        {
+          "text": "发送窗口=min(rwnd,cwnd)，rwnd流量控制，cwnd拥塞控制",
+          "isHighFrequency": true,
+          "examYears": [2014, 2018, 2020, 2022],
+          "tags": ["窗口"]
+        },
+        {
+          "text": "超时：ssthresh=cwnd/2, cwnd=1；3个重复ACK：ssthresh=cwnd/2, cwnd=ssthresh",
+          "isHighFrequency": true,
+          "examYears": [2016, 2019, 2022],
+          "tags": ["拥塞处理"]
+        }
+      ]
+    }
+  ]
+}
