@@ -1,0 +1,75 @@
+{
+  "id": "ch04",
+  "subject": "data-structures",
+  "title": "串",
+  "titleEn": "String",
+  "overview": "串（字符串）是一种特殊的线性表，数据元素为字符。本章重点掌握KMP模式匹配算法，包括next数组和nextval数组的计算，这是408考试的高频考点。",
+  "sections": [
+    {
+      "id": "s01",
+      "title": "串的定义和基本操作",
+      "difficulty": 1,
+      "tags": ["串", "字符串", "基本操作", "子串", "主串"],
+      "content": "## 串的定义\n\n串（String）是由零个或多个字符组成的有限序列，记作 S = 'a₁a₂...aₙ'。\n\n- **空串**：n=0，记作 '' 或 ∅\n- **空格串**：由一个或多个空格组成的串（不是空串）\n- **子串**：串中任意个连续字符组成的子序列\n- **主串**：包含子串的串\n- **位置**：子串在主串中的位置是子串第一个字符在主串中的位置（从1开始）\n- **相等**：两个串长度相等且对应位置字符相同\n\n## 基本操作\n\n| 操作 | 功能 |\n|------|------|\n| StrAssign(&T, chars) | 将字符串常量赋值给T |\n| StrCopy(&T, S) | 将串S复制给T |\n| StrEmpty(S) | 判断串是否为空 |\n| StrCompare(S, T) | 比较两个串的大小 |\n| StrLength(S) | 返回串的长度 |\n| SubString(&T, S, pos, len) | 求子串，从pos开始取len个字符 |\n| Concat(&T, S1, S2) | 将S1和S2连接成T |\n| Index(S, T, pos) | 从pos开始定位子串T在S中的位置 |\n| StrInsert(&S, pos, T) | 在S的第pos个字符前插入T |\n| StrDelete(&S, pos, len) | 从S的第pos个字符开始删除len个字符 |\n| Replace(&S, T, V) | 用V替换S中所有子串T |\n\n**串比较规则**：从第一个字符开始比较ASCII码，直到遇到不同字符或串结束。\n- S > T：S的对应字符ASCII码大于T，或S更长\n- S < T：S的对应字符ASCII码小于T，或S更短\n- S == T：长度相等且所有字符相同\n\n## 串的模式匹配\n\n在主串S中查找子串T（模式串）的位置，是串的最重要操作。\n\n主要算法：BF算法和KMP算法。",
+      "keyPoints": [
+        {
+          "text": "空串长度为0，空格串不是空串；子串位置从1开始",
+          "isHighFrequency": false,
+          "tags": ["基本概念"]
+        },
+        {
+          "text": "串比较规则：从第一个字符开始比较ASCII码，直到遇到不同字符",
+          "isHighFrequency": false,
+          "tags": ["串比较"]
+        }
+      ]
+    },
+    {
+      "id": "s02",
+      "title": "串的存储结构",
+      "difficulty": 1,
+      "tags": ["顺序存储", "链式存储", "堆分配"],
+      "content": "## 顺序存储\n\n```c\n#define MAXLEN 255\ntypedef struct {\n    char ch[MAXLEN + 1];  // 下标0不用或用于哨兵\n    int length;\n} SString;\n```\n\n**特点**：\n- 定长数组，空间固定\n- 可以直接用数组下标访问\n- 可能浪费空间（实际串长小于MAXLEN）\n- 408考试中模式匹配通常使用此结构\n\n## 堆分配存储\n\n```c\ntypedef struct {\n    char *ch;    // 动态分配的字符数组\n    int length;\n} HString;\n```\n\n**特点**：\n- 动态分配空间，按需分配\n- 灵活但需要手动释放（malloc/free）\n- 不会浪费空间\n\n## 链式存储\n\n```c\n#define CHUNKSIZE 80\ntypedef struct Chunk {\n    char ch[CHUNKSIZE];\n    struct Chunk *next;\n} Chunk;\n\ntypedef struct {\n    Chunk *head, *tail;\n    int length;\n} LString;\n```\n\n**特点**：\n- 每个结点存储一个或多个字符\n- 插入删除方便\n- 存储密度低（指针占用空间）\n- 操作复杂，需要跨结点处理\n\n## 三种存储结构对比\n\n| 存储方式 | 优点 | 缺点 | 适用场景 |\n|----------|------|------|----------|\n| 顺序存储 | 简单，支持随机访问 | 定长，可能浪费空间 | 通用，模式匹配 |\n| 堆分配 | 灵活，按需分配 | 需要手动管理内存 | 动态字符串 |\n| 链式存储 | 插入删除方便 | 密度低，操作复杂 | 频繁修改的场景 |",
+      "keyPoints": [
+        {
+          "text": "408考试中模式匹配通常使用顺序存储结构",
+          "isHighFrequency": false,
+          "tags": ["存储结构"]
+        }
+      ]
+    },
+    {
+      "id": "s03",
+      "title": "模式匹配",
+      "difficulty": 3,
+      "tags": ["BF算法", "KMP算法", "next数组", "nextval数组", "模式匹配"],
+      "content": "## BF算法（暴力匹配 / 朴素模式匹配）\n\n从主串的每个位置开始逐字符比较：\n\n```c\nint BF(SString S, SString T, int pos) {\n    int i = pos, j = 1;\n    while (i <= S.length && j <= T.length) {\n        if (S.ch[i] == T.ch[j]) {\n            i++; j++;  // 匹配成功，继续\n        } else {\n            i = i - j + 2;  // 主串指针回溯\n            j = 1;           // 模式串指针回到起点\n        }\n    }\n    if (j > T.length) return i - T.length;  // 匹配成功\n    else return 0;  // 匹配失败\n}\n```\n\n**时间复杂度**：\n- 最好情况：O(n+m)（每次第一个字符就不匹配）\n- 最坏情况：**O(n×m)**（主串指针频繁回溯）\n- 平均情况：O(n+m)\n\n## KMP算法\n\n**核心思想**：利用已匹配信息，**避免主串指针回溯**，只移动模式串指针。\n\n**时间复杂度**：**O(n+m)**\n\n### 前缀和后缀\n\n- **前缀**：包含第一个字符但不包含最后一个字符的子串\n- **后缀**：包含最后一个字符但不包含第一个字符的子串\n- **最长相等前后缀**：前缀和后缀中相等的最长子串的长度\n\n**示例**：模式串 'ABABC'\n\n| 子串 | 前缀 | 后缀 | 最长相等前后缀长度 |\n|------|------|------|------------------|\n| A | 无 | 无 | 0 |\n| AB | A | B | 0 |\n| ABA | A, AB | A, BA | 1 (A) |\n| ABAB | A, AB, ABA | B, AB, BAB | 2 (AB) |\n| ABABC | A, AB, ABA, ABAB | C, BC, ABC, BABC | 0 |\n\n### next数组\n\nnext[j]表示当模式串第j个字符匹配失败时，应将模式串的第next[j]个字符与主串当前字符对齐。\n\n**计算规则**：\n- next[1] = 0（第一个字符就失败，主串指针后移）\n- next[j] = 模式串前j-1个字符的**最长相等前后缀长度** + 1\n- 特殊情况：next[j] = 1（无相等前后缀）\n\n**示例**：模式串 'ABABC'\n\n| j | 1 | 2 | 3 | 4 | 5 |\n|---|---|---|---|---|---|\n| P | A | B | A | B | C |\n| next | 0 | 1 | 1 | 2 | 3 |\n\n**next数组手算方法**：\n1. next[1] = 0\n2. next[2] = 1\n3. 对于 j ≥ 3：看P[1..j-1]的最长相等前后缀长度，加1\n\n### nextval数组（改进的KMP）\n\n当p[next[j]] = p[j]时，继续回溯到next[next[j]]，避免无效比较。\n\n**计算规则**：\n- nextval[1] = 0\n- 若 p[j] = p[next[j]]，则 nextval[j] = nextval[next[j]]\n- 否则 nextval[j] = next[j]\n\n**示例**：模式串 'ABABC'\n\n| j | 1 | 2 | 3 | 4 | 5 |\n|---|---|---|---|---|---|\n| P | A | B | A | B | C |\n| next | 0 | 1 | 1 | 2 | 3 |\n| nextval | 0 | 1 | 0 | 1 | 3 |\n\n**手算nextval**：\n1. nextval[1] = 0\n2. 对于 j ≥ 2：比较 P[j] 和 P[next[j]]\n   - 如果相同：nextval[j] = nextval[next[j]]\n   - 如果不同：nextval[j] = next[j]\n\n### KMP匹配过程\n\n```c\nint KMP(SString S, SString T, int next[], int pos) {\n    int i = pos, j = 1;\n    while (i <= S.length && j <= T.length) {\n        if (j == 0 || S.ch[i] == T.ch[j]) {\n            i++; j++;  // 匹配成功或j=0时，都前进\n        } else {\n            j = next[j];  // 主串不回溯，模式串回溯\n        }\n    }\n    if (j > T.length) return i - T.length;\n    else return 0;\n}\n```\n\n### BF与KMP对比\n\n| 对比 | BF | KMP |\n|------|----|----|\n| 主串指针 | **回溯** | **不回溯** |\n| 模式串指针 | 回到起点 | 回到next[j] |\n| 时间复杂度 | O(n×m) | O(n+m) |\n| 适用场景 | 短模式串 | 长模式串 |",
+      "keyPoints": [
+        {
+          "text": "KMP算法核心：利用next数组避免主串指针回溯，时间复杂度O(n+m)",
+          "isHighFrequency": true,
+          "examYears": [2015, 2019, 2022, 2024],
+          "tags": ["KMP算法"]
+        },
+        {
+          "text": "next数组：next[j]等于模式串前j-1个字符的最长相等前后缀长度+1",
+          "isHighFrequency": true,
+          "examYears": [2016, 2018, 2020, 2023],
+          "tags": ["next数组"]
+        },
+        {
+          "text": "nextval数组：P[j]=P[next[j]]时nextval[j]=nextval[next[j]]，避免无效比较",
+          "isHighFrequency": true,
+          "examYears": [2017, 2021],
+          "tags": ["nextval数组"]
+        },
+        {
+          "text": "BF算法最坏O(n×m)，KMP算法O(n+m)；BF主串回溯，KMP主串不回溯",
+          "isHighFrequency": true,
+          "examYears": [2014, 2018, 2021],
+          "tags": ["BF vs KMP"]
+        }
+      ]
+    }
+  ]
+}
