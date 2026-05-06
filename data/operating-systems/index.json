@@ -1,0 +1,83 @@
+[
+  {
+    "id": "ch01",
+    "slug": "ch01-overview",
+    "title": "操作系统概述",
+    "sectionCount": 3,
+    "sections": [
+      {"id": "s01", "title": "操作系统的概念"},
+      {"id": "s02", "title": "操作系统的发展历程"},
+      {"id": "s03", "title": "系统调用和系统结构"}
+    ],
+    "highFrequencyTopics": [
+      {"title": "操作系统特征", "years": [2015, 2019]},
+      {"title": "系统调用", "years": [2017, 2021]}
+    ]
+  },
+  {
+    "id": "ch02",
+    "slug": "ch02-process-management",
+    "title": "进程管理",
+    "sectionCount": 5,
+    "sections": [
+      {"id": "s01", "title": "进程的概念"},
+      {"id": "s02", "title": "进程同步"},
+      {"id": "s03", "title": "死锁"},
+      {"id": "s04", "title": "进程调度"},
+      {"id": "s05", "title": "线程"}
+    ],
+    "highFrequencyTopics": [
+      {"title": "信号量应用", "years": [2014, 2016, 2018, 2020, 2022, 2024]},
+      {"title": "死锁", "years": [2015, 2018, 2021, 2023]},
+      {"title": "调度算法", "years": [2013, 2017, 2019, 2022]}
+    ]
+  },
+  {
+    "id": "ch03",
+    "slug": "ch03-memory-management",
+    "title": "内存管理",
+    "sectionCount": 4,
+    "sections": [
+      {"id": "s01", "title": "内存管理基础"},
+      {"id": "s02", "title": "连续分配"},
+      {"id": "s03", "title": "非连续分配"},
+      {"id": "s04", "title": "虚拟内存"}
+    ],
+    "highFrequencyTopics": [
+      {"title": "页面置换算法", "years": [2014, 2017, 2019, 2021, 2023]},
+      {"title": "分页分段", "years": [2015, 2018, 2020, 2022]},
+      {"title": "抖动", "years": [2016, 2020]}
+    ]
+  },
+  {
+    "id": "ch04",
+    "slug": "ch04-file-management",
+    "title": "文件管理",
+    "sectionCount": 4,
+    "sections": [
+      {"id": "s01", "title": "文件概念"},
+      {"id": "s02", "title": "文件分配"},
+      {"id": "s03", "title": "磁盘调度"},
+      {"id": "s04", "title": "文件系统实现"}
+    ],
+    "highFrequencyTopics": [
+      {"title": "磁盘调度算法", "years": [2015, 2018, 2021, 2023]},
+      {"title": "文件分配方式", "years": [2014, 2017, 2020]}
+    ]
+  },
+  {
+    "id": "ch05",
+    "slug": "ch05-io-management",
+    "title": "I/O管理",
+    "sectionCount": 3,
+    "sections": [
+      {"id": "s01", "title": "I/O管理概述"},
+      {"id": "s02", "title": "I/O软件层次"},
+      {"id": "s03", "title": "磁盘组织和调度"}
+    ],
+    "highFrequencyTopics": [
+      {"title": "SPOOLing技术", "years": [2016, 2019, 2022]},
+      {"title": "I/O控制方式", "years": [2014, 2018, 2021]}
+    ]
+  }
+]
