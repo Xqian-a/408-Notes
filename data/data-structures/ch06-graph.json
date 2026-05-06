@@ -1,0 +1,147 @@
+{
+  "id": "ch06",
+  "subject": "data-structures",
+  "title": "图",
+  "titleEn": "Graph",
+  "overview": "图是一种复杂的非线性结构，本章重点掌握图的存储、遍历、最小生成树、最短路径、拓扑排序和关键路径，这些是408考试的高频考点。",
+  "sections": [
+    {
+      "id": "s01",
+      "title": "图的基本概念",
+      "difficulty": 1,
+      "tags": ["有向图", "无向图", "完全图", "连通图", "强连通图", "度"],
+      "content": "## 图的定义\n\n图G由顶点集V和边集E组成，记作 G = (V, E)\n\n- V(G)：顶点的有限集合，不能为空\n- E(G)：边的有限集合，可以为空\n\n## 基本术语\n\n| 术语 | 含义 |\n|------|------|\n| **有向图** | 边有方向，用<u,v>表示 |\n| **无向图** | 边无方向，用(u,v)表示 |\n| **完全图** | 任意两点间都有边 |\n| **稀疏图/稠密图** | 边数远小于/接近完全图 |\n| **度** | 顶点关联的边数 |\n| **入度** | 有向图中指向该顶点的边数 |\n| **出度** | 有向图中从该顶点出发的边数 |\n| **路径** | 顶点序列 |\n| **路径长度** | 路径上边的条数 |\n| **回路（环）** | 起点和终点相同的路径 |\n| **简单路径** | 顶点不重复的路径 |\n| **连通图** | 任意两点间有路径（无向图） |\n| **强连通图** | 任意两点互相可达（有向图） |\n| **连通分量** | 无向图的极大连通子图 |\n| **强连通分量** | 有向图的极大强连通子图 |\n| **生成树** | 包含图中所有顶点的极小连通子图 |\n| **生成森林** | 由连通分量的生成树组成 |\n\n## 图的性质\n\n- 无向图：|E| = Σ度(v)/2，所有顶点度之和为偶数\n- 有向图：|E| = Σ入度(v) = Σ出度(v)\n- 完全图：无向 n(n-1)/2 条边，有向 n(n-1) 条边\n- 连通图至少 n-1 条边\n- 强连通图至少 n 条边\n- 连通图中：|E| ≥ n-1\n- 无向连通图的生成树有 n-1 条边",
+      "keyPoints": [
+        {
+          "text": "无向图所有顶点度之和为偶数，等于边数的2倍",
+          "isHighFrequency": true,
+          "examYears": [2015, 2019, 2022],
+          "tags": ["图的性质"]
+        },
+        {
+          "text": "连通图至少n-1条边，强连通图至少n条边",
+          "isHighFrequency": true,
+          "examYears": [2014, 2018, 2021],
+          "tags": ["连通性"]
+        },
+        {
+          "text": "连通分量是极大连通子图，生成树是包含所有顶点的极小连通子图",
+          "isHighFrequency": false,
+          "tags": ["连通分量", "生成树"]
+        }
+      ]
+    },
+    {
+      "id": "s02",
+      "title": "图的存储结构",
+      "difficulty": 2,
+      "tags": ["邻接矩阵", "邻接表", "十字链表", "邻接多重表"],
+      "content": "## 邻接矩阵\n\n用n×n矩阵A存储：\n\n**无向图**：A[i][j]=1表示顶点i和j之间有边\n\n**有向图**：A[i][j]=1表示有边<i,j>\n\n```c\ntypedef struct {\n    int vexnum, arcnum;     // 顶点数和边数\n    int vexs[MaxVex];       // 顶点表\n    int arcs[MaxVex][MaxVex]; // 邻接矩阵\n} MGraph;\n```\n\n**空间复杂度**：O(n²)\n\n**适用**：稠密图\n\n**特点**：\n- 无向图的邻接矩阵是对称矩阵（可以只存上三角）\n- 第i行的非零元素个数 = 顶点i的出度\n- 第i列的非零元素个数 = 顶点i的入度\n- 求顶点度：遍历一行或一列\n\n## 邻接表\n\n每个顶点建立一个单链表，存储该顶点的所有邻接顶点。\n\n```c\ntypedef struct ArcNode {\n    int adjvex;              // 邻接顶点编号\n    struct ArcNode *next;    // 下一条边\n    // InfoType info;        // 边的权值等信息\n} ArcNode;\n\ntypedef struct VNode {\n    int data;                // 顶点信息\n    ArcNode *first;          // 第一条边\n} VNode, AdjList[MaxVex];\n\ntypedef struct {\n    AdjList vertices;\n    int vexnum, arcnum;\n} ALGraph;\n```\n\n**空间复杂度**：O(n + e)\n\n**适用**：稀疏图\n\n**特点**：\n- 无向图：第i个链表的结点数 = 顶点i的度\n- 有向图：第i个链表的结点数 = 顶点i的出度\n- 求入度需要遍历所有链表\n- 邻接表**不唯一**（链表中边的顺序可以不同）\n\n## 十字链表（有向图）\n\n结合邻接矩阵和邻接表，同时便于求入度和出度。\n\n每个结点有5个域：tailvex, headvex, hlink, tlink, info\n\n## 邻接多重表（无向图）\n\n每条边只存储一次，便于边的操作（删除等）。\n\n## 存储结构对比\n\n| 存储方式 | 空间 | 适用 | 求度 | 求边 |\n|----------|------|------|------|------|\n| 邻接矩阵 | O(n²) | 稠密图 | O(n) | O(1) |\n| 邻接表 | O(n+e) | 稀疏图 | O(出度) | O(e) |\n| 十字链表 | O(n+e) | 有向图 | O(n) | O(e) |\n| 邻接多重表 | O(n+e) | 无向图 | O(n) | O(e) |",
+      "keyPoints": [
+        {
+          "text": "邻接矩阵O(n²)适合稠密图，邻接表O(n+e)适合稀疏图",
+          "isHighFrequency": true,
+          "examYears": [2014, 2017, 2020],
+          "tags": ["图的存储"]
+        },
+        {
+          "text": "无向图邻接矩阵是对称矩阵，第i行非零元素个数=顶点i的度",
+          "isHighFrequency": true,
+          "examYears": [2016, 2019, 2022],
+          "tags": ["邻接矩阵"]
+        },
+        {
+          "text": "邻接表不唯一（边顺序可不同），有向图邻接表求入度需遍历所有链表",
+          "isHighFrequency": false,
+          "tags": ["邻接表"]
+        }
+      ]
+    },
+    {
+      "id": "s03",
+      "title": "图的遍历",
+      "difficulty": 2,
+      "tags": ["DFS", "BFS", "连通分量", "生成树"],
+      "content": "## 深度优先搜索（DFS）\n\n类似树的先序遍历，使用**栈**（递归实现）：\n\n1. 访问起始顶点v，标记已访问\n2. 选择v的一个未访问的邻接顶点w，递归DFS(w)\n3. 回溯，选择其他未访问的邻接顶点\n4. 直到所有可达顶点都被访问\n\n```c\nbool visited[MaxVex];\nvoid DFS(Graph G, int v) {\n    visit(v);\n    visited[v] = true;\n    for (int w = FirstNeighbor(G, v); w >= 0; w = NextNeighbor(G, v, w)) {\n        if (!visited[w]) {\n            DFS(G, w);\n        }\n    }\n}\n```\n\n**时间复杂度**：\n- 邻接矩阵：O(n²)（每次都要遍历一行）\n- 邻接表：O(n + e)（每个顶点和每条边各访问一次）\n\n## 广度优先搜索（BFS）\n\n类似树的层序遍历，使用**队列**：\n\n1. 访问起始顶点v，入队\n2. 出队一个顶点u，访问其所有未访问的邻接顶点并入队\n3. 重复直到队空\n\n```c\nvoid BFS(Graph G, int v) {\n    Queue Q;\n    InitQueue(Q);\n    visit(v);\n    visited[v] = true;\n    EnQueue(Q, v);\n    while (!QueueEmpty(Q)) {\n        DeQueue(Q, u);\n        for (int w = FirstNeighbor(G, u); w >= 0; w = NextNeighbor(G, u, w)) {\n            if (!visited[w]) {\n                visit(w);\n                visited[w] = true;\n                EnQueue(Q, w);\n            }\n        }\n    }\n}\n```\n\n**时间复杂度**：\n- 邻接矩阵：O(n²)\n- 邻接表：O(n + e)\n\n## 遍历与连通性\n\n- **无向图**：DFS/BFS一次能访问的顶点构成一个**连通分量**\n  - 调用DFS/BFS的次数 = 连通分量数\n- **有向图**：强连通分量需用Kosaraju或Tarjan算法\n\n## DFS和BFS生成树\n\n- **DFS生成树**：DFS过程中经过的边构成的树\n- **BFS生成树**：BFS过程中经过的边构成的树\n- 邻接矩阵的DFS/BFS生成树唯一\n- 邻接表的DFS/BFS生成树不唯一（邻接点顺序不同）\n\n## DFS vs BFS\n\n| 对比 | DFS | BFS |\n|------|-----|-----|\n| 数据结构 | 栈（递归） | 队列 |\n| 空间复杂度 | O(n) | O(n) |\n| 适用场景 | 连通分量、回溯 | 最短路径（无权图） |\n| 特点 | 深度优先 | 广度优先 |",
+      "keyPoints": [
+        {
+          "text": "DFS用栈（递归），BFS用队列，邻接表时间复杂度O(n+e)",
+          "isHighFrequency": true,
+          "examYears": [2013, 2016, 2018, 2021],
+          "tags": ["DFS", "BFS"]
+        },
+        {
+          "text": "DFS生成树：先序遍历=入栈顺序，后序遍历=出栈顺序",
+          "isHighFrequency": true,
+          "examYears": [2015, 2019, 2022],
+          "tags": ["DFS生成树"]
+        },
+        {
+          "text": "无向图连通分量数=调用DFS/BFS的次数",
+          "isHighFrequency": true,
+          "examYears": [2014, 2017, 2020],
+          "tags": ["连通分量"]
+        }
+      ]
+    },
+    {
+      "id": "s04",
+      "title": "最小生成树和最短路径",
+      "difficulty": 3,
+      "tags": ["Prim", "Kruskal", "Dijkstra", "Floyd", "最小生成树", "最短路径"],
+      "content": "## 最小生成树（MST）\n\n连通图的生成树中，边权之和最小的树。\n\n**性质**：\n- n个顶点的MST有n-1条边\n- MST可能不唯一（边权相等时）\n- MST中加上一条边会形成唯一环\n\n### Prim算法（加点法）\n\n从一个顶点开始，每次选择**离已选顶点集合最近**的未选顶点加入。\n\n**步骤**：\n1. 初始化：选一个起始顶点，加入集合U\n2. 在所有连接U和V-U的边中，选权值最小的边\n3. 将该边和对应的顶点加入U\n4. 重复2-3直到U=V\n\n**时间复杂度**：O(n²)\n\n**适用**：稠密图\n\n### Kruskal算法（加边法）\n\n将所有边按权值排序，每次选择**不构成回路**的最小边加入。\n\n**步骤**：\n1. 将所有边按权值从小到大排序\n2. 依次考虑每条边\n3. 如果该边的两个端点不在同一连通分量，则加入\n4. 否则跳过\n5. 直到选了n-1条边\n\n**时间复杂度**：O(e log e)\n\n**适用**：稀疏图\n\n### Prim vs Kruskal\n\n| 对比 | Prim | Kruskal |\n|------|------|----------|\n| 策略 | 加点法 | 加边法 |\n| 时间复杂度 | O(n²) | O(e log e) |\n| 适用 | 稠密图 | 稀疏图 |\n| 实现 | 邻接矩阵+lowcost数组 | 边集数组+并查集 |\n\n## 最短路径\n\n### Dijkstra算法（单源最短路径）\n\n求一个顶点到其他所有顶点的最短路径：\n\n**步骤**：\n1. 初始化：源点到自身距离0，其他为∞\n2. 选择未访问的距离最小顶点u，标记已访问\n3. 用u更新其所有未访问邻接顶点的距离\n4. 重复n-1次\n\n**时间复杂度**：O(n²)\n\n**不能处理负权边**\n\n**示例**：\n\n| 步骤 | 选中顶点 | 更新距离 |\n|------|---------|----------|\n| 初始 | - | d[v1]=0, d[v2]=∞, d[v3]=∞ |\n| 1 | v1 | d[v2]=2, d[v3]=5 |\n| 2 | v2 | d[v3]=4 |\n| 3 | v3 | - |\n\n### Floyd算法（各顶点间最短路径）\n\n使用动态规划：\n\n```c\nfor (k = 0; k < n; k++)\n    for (i = 0; i < n; i++)\n        for (j = 0; j < n; j++)\n            if (D[i][k] + D[k][j] < D[i][j])\n                D[i][j] = D[i][k] + D[k][j];\n```\n\n**时间复杂度**：O(n³)\n\n**可以处理负权边**（不能有负权回路）\n\n### Dijkstra vs Floyd\n\n| 对比 | Dijkstra | Floyd |\n|------|----------|-------|\n| 类型 | 单源最短路径 | 各顶点间最短路径 |\n| 时间复杂度 | O(n²) | O(n³) |\n| 负权边 | **不能** | **可以** |\n| 实现 | 贪心 | 动态规划 |",
+      "keyPoints": [
+        {
+          "text": "Prim算法O(n²)适合稠密图，Kruskal算法O(eloge)适合稀疏图",
+          "isHighFrequency": true,
+          "examYears": [2015, 2018, 2020, 2022],
+          "tags": ["最小生成树"]
+        },
+        {
+          "text": "Dijkstra算法O(n²)不能处理负权边，Floyd算法O(n³)可以处理负权边",
+          "isHighFrequency": true,
+          "examYears": [2014, 2017, 2019, 2021, 2023],
+          "tags": ["最短路径"]
+        },
+        {
+          "text": "Dijkstra每次选距离最小的未访问顶点，更新邻接顶点距离",
+          "isHighFrequency": true,
+          "examYears": [2016, 2020, 2023],
+          "tags": ["Dijkstra算法"]
+        }
+      ]
+    },
+    {
+      "id": "s05",
+      "title": "拓扑排序和关键路径",
+      "difficulty": 3,
+      "tags": ["拓扑排序", "AOV网", "关键路径", "AOE网", "ve", "vl"],
+      "content": "## 拓扑排序\n\n对有向无环图（DAG）的顶点进行线性排序，使得对于边<u,v>，u排在v前面。\n\n**算法**：\n1. 选择一个入度为0的顶点输出\n2. 删除该顶点及其出边（邻接顶点入度减1）\n3. 重复直到所有顶点输出（成功）或找不到入度为0的顶点（有环）\n\n**时间复杂度**：O(n + e)\n\n**应用**：\n- 判断有向图是否有环\n- 课程安排、任务调度\n- 编译顺序\n\n**拓扑排序结果不唯一**（入度为0的顶点可能有多个）\n\n## 关键路径\n\nAOE网（Activity On Edge）中从源点到汇点的**最长路径**。\n\n### 相关概念\n\n| 术语 | 定义 |\n|------|------|\n| **事件最早发生时间** ve(v) | 从源点到v的最长路径长度 |\n| **事件最迟发生时间** vl(v) | 不影响工期的前提下，v最晚发生时间 |\n| **活动最早开始时间** e(a) | e(a) = ve(起点) |\n| **活动最迟开始时间** l(a) | l(a) = vl(终点) - w(a) |\n| **关键活动** | e(a) = l(a) 的活动 |\n\n### 计算过程\n\n1. **正向求ve**：ve(v) = max{ve(u) + w(u,v)}，从源点开始\n2. **逆向求vl**：vl(v) = min{vl(w) - w(v,w)}，从汇点开始\n3. **求e和l**：e(a) = ve(起点)，l(a) = vl(终点) - w(a)\n4. **找关键活动**：e(a) = l(a) 的活动\n\n**关键路径上所有活动都是关键活动，缩短关键活动可以缩短工期。**\n\n**注意**：\n- 关键路径可能不唯一\n- 缩短关键活动不一定能缩短工期（可能有并行关键路径）\n- 关键活动的时间不能任意缩短",
+      "keyPoints": [
+        {
+          "text": "拓扑排序：选入度为0的顶点输出并删除出边，时间复杂度O(n+e)",
+          "isHighFrequency": true,
+          "examYears": [2016, 2019, 2022, 2024],
+          "tags": ["拓扑排序"]
+        },
+        {
+          "text": "关键路径是AOE网中源点到汇点的最长路径，关键活动e(a)=l(a)",
+          "isHighFrequency": true,
+          "examYears": [2015, 2018, 2021, 2023],
+          "tags": ["关键路径"]
+        },
+        {
+          "text": "事件最早ve用前驱取max，最迟vl用后继取min",
+          "isHighFrequency": true,
+          "examYears": [2017, 2020, 2022],
+          "tags": ["ve和vl计算"]
+        },
+        {
+          "text": "拓扑排序结果不唯一，关键路径可能不唯一",
+          "isHighFrequency": false,
+          "tags": ["唯一性"]
+        }
+      ]
+    }
+  ]
+}
