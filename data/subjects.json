@@ -1,0 +1,42 @@
+[
+  {
+    "id": "data-structures",
+    "name": "数据结构",
+    "nameEn": "Data Structures",
+    "slug": "data-structures",
+    "points": 45,
+    "icon": "tree",
+    "chapterCount": 8,
+    "description": "线性表、栈、队列、数组、树、图、查找、排序"
+  },
+  {
+    "id": "computer-organization",
+    "name": "计算机组成原理",
+    "nameEn": "Computer Organization",
+    "slug": "computer-organization",
+    "points": 45,
+    "icon": "cpu",
+    "chapterCount": 7,
+    "description": "数据表示、存储器、指令系统、CPU、总线、I/O"
+  },
+  {
+    "id": "operating-systems",
+    "name": "操作系统",
+    "nameEn": "Operating Systems",
+    "slug": "operating-systems",
+    "points": 35,
+    "icon": "monitor",
+    "chapterCount": 5,
+    "description": "进程管理、内存管理、文件管理、I/O管理"
+  },
+  {
+    "id": "computer-networks",
+    "name": "计算机网络",
+    "nameEn": "Computer Networks",
+    "slug": "computer-networks",
+    "points": 25,
+    "icon": "network",
+    "chapterCount": 6,
+    "description": "物理层、数据链路层、网络层、传输层、应用层"
+  }
+]
