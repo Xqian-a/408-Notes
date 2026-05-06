@@ -1,0 +1,140 @@
+[
+  {
+    "id": "ch01",
+    "slug": "ch01-introduction",
+    "title": "绪论",
+    "sectionCount": 3,
+    "sections": [
+      {"id": "s01", "title": "数据结构的基本概念"},
+      {"id": "s02", "title": "算法和算法评价"}
+    ],
+    "highFrequencyTopics": [
+      {"title": "时间复杂度分析", "years": [2014, 2016, 2019, 2021, 2023]}
+    ]
+  },
+  {
+    "id": "ch02",
+    "slug": "ch02-linear-list",
+    "title": "线性表",
+    "sectionCount": 4,
+    "sections": [
+      {"id": "s01", "title": "线性表的定义和基本操作"},
+      {"id": "s02", "title": "顺序表"},
+      {"id": "s03", "title": "链表"},
+      {"id": "s04", "title": "顺序表和链表的比较"}
+    ],
+    "highFrequencyTopics": [
+      {"title": "链表操作", "years": [2013, 2015, 2016, 2018, 2020, 2022]},
+      {"title": "顺序表查找删除", "years": [2014, 2017, 2019, 2021]}
+    ]
+  },
+  {
+    "id": "ch03",
+    "slug": "ch03-stack-queue-array",
+    "title": "栈、队列和数组",
+    "sectionCount": 5,
+    "sections": [
+      {"id": "s01", "title": "栈"},
+      {"id": "s02", "title": "队列"},
+      {"id": "s03", "title": "栈和队列的应用"},
+      {"id": "s04", "title": "数组和特殊矩阵"},
+      {"id": "s05", "title": "栈和队列的综合应用"}
+    ],
+    "highFrequencyTopics": [
+      {"title": "栈的应用-表达式求值", "years": [2014, 2017, 2020, 2023]},
+      {"title": "队列的应用-BFS", "years": [2015, 2018, 2021]},
+      {"title": "出栈序列判断", "years": [2013, 2016, 2019, 2022]}
+    ]
+  },
+  {
+    "id": "ch04",
+    "slug": "ch04-string",
+    "title": "串",
+    "sectionCount": 3,
+    "sections": [
+      {"id": "s01", "title": "串的定义和基本操作"},
+      {"id": "s02", "title": "串的存储结构"},
+      {"id": "s03", "title": "模式匹配"}
+    ],
+    "highFrequencyTopics": [
+      {"title": "KMP算法", "years": [2015, 2019, 2022, 2024]}
+    ]
+  },
+  {
+    "id": "ch05",
+    "slug": "ch05-tree",
+    "title": "树与二叉树",
+    "sectionCount": 6,
+    "sections": [
+      {"id": "s01", "title": "树的基本概念"},
+      {"id": "s02", "title": "二叉树的概念"},
+      {"id": "s03", "title": "二叉树的遍历"},
+      {"id": "s04", "title": "线索二叉树"},
+      {"id": "s05", "title": "树、森林与二叉树的关系"},
+      {"id": "s06", "title": "哈夫曼树和哈夫曼编码"}
+    ],
+    "highFrequencyTopics": [
+      {"title": "二叉树遍历序列还原", "years": [2013, 2015, 2017, 2019, 2021, 2023]},
+      {"title": "哈夫曼编码", "years": [2014, 2018, 2020, 2022]},
+      {"title": "二叉树的性质", "years": [2016, 2019, 2022, 2024]}
+    ]
+  },
+  {
+    "id": "ch06",
+    "slug": "ch06-graph",
+    "title": "图",
+    "sectionCount": 5,
+    "sections": [
+      {"id": "s01", "title": "图的基本概念"},
+      {"id": "s02", "title": "图的存储结构"},
+      {"id": "s03", "title": "图的遍历"},
+      {"id": "s04", "title": "最小生成树和最短路径"},
+      {"id": "s05", "title": "拓扑排序和关键路径"}
+    ],
+    "highFrequencyTopics": [
+      {"title": "最短路径算法", "years": [2014, 2017, 2019, 2021, 2023]},
+      {"title": "最小生成树", "years": [2015, 2018, 2020, 2022]},
+      {"title": "拓扑排序", "years": [2016, 2019, 2022, 2024]},
+      {"title": "DFS/BFS遍历", "years": [2013, 2016, 2018, 2021]}
+    ]
+  },
+  {
+    "id": "ch07",
+    "slug": "ch07-search",
+    "title": "查找",
+    "sectionCount": 5,
+    "sections": [
+      {"id": "s01", "title": "查找的基本概念"},
+      {"id": "s02", "title": "顺序查找和折半查找"},
+      {"id": "s03", "title": "B树和B+树"},
+      {"id": "s04", "title": "散列表"},
+      {"id": "s05", "title": "查找算法的比较"}
+    ],
+    "highFrequencyTopics": [
+      {"title": "B树和B+树", "years": [2014, 2017, 2020, 2023]},
+      {"title": "散列表查找", "years": [2015, 2018, 2021, 2024]},
+      {"title": "折半查找", "years": [2013, 2016, 2019, 2022]}
+    ]
+  },
+  {
+    "id": "ch08",
+    "slug": "ch08-sorting",
+    "title": "排序",
+    "sectionCount": 7,
+    "sections": [
+      {"id": "s01", "title": "排序的基本概念"},
+      {"id": "s02", "title": "插入排序"},
+      {"id": "s03", "title": "交换排序"},
+      {"id": "s04", "title": "选择排序"},
+      {"id": "s05", "title": "归并排序和基数排序"},
+      {"id": "s06", "title": "内部排序算法的比较"},
+      {"id": "s07", "title": "外部排序"}
+    ],
+    "highFrequencyTopics": [
+      {"title": "快速排序", "years": [2014, 2016, 2019, 2021, 2023]},
+      {"title": "堆排序", "years": [2015, 2018, 2020, 2022]},
+      {"title": "排序算法比较", "years": [2013, 2017, 2019, 2022, 2024]},
+      {"title": "外部排序", "years": [2016, 2020, 2023]}
+    ]
+  }
+]
